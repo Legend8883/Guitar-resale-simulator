@@ -1,0 +1,82 @@
+package org.legend8883.guitarResaleSimulator.Menu;
+
+import org.legend8883.guitarResaleSimulator.Client.BuyingGuitarFromClient;
+import org.legend8883.guitarResaleSimulator.Client.SellingGuitarToClient;
+import org.legend8883.guitarResaleSimulator.Player.PlayerValues;
+
+import java.util.Scanner;
+
+public class Menu {
+    public void open() {
+        Scanner scanner = new Scanner(System.in);
+
+        String optionStr;
+        int optionInt = 0;
+
+
+
+        while (optionInt == 0) {
+
+            System.out.println("Меню приложения \"Симулятор перекупа гитар\"");
+            System.out.println(
+                    """
+                            Выберите действие:
+                            1. Купить гитару
+                            2. Продать имеющуюся гитару
+                            3. Посмотреть свой баланс
+                            4. Посмотреть список имеющихся гитар
+                            5. Выход""");
+
+            optionStr = scanner.nextLine();
+
+            try {
+
+                optionInt = Integer.parseInt(optionStr);
+                PlayerValues playerValues = new PlayerValues();
+
+                switch (optionInt) {
+
+                    case 1:
+                        BuyingGuitarFromClient buyingGuitarFromClient = new BuyingGuitarFromClient();
+                        buyingGuitarFromClient.buy();
+                        break;
+                    case 2:
+                        SellingGuitarToClient sellingGuitarToClient = new SellingGuitarToClient();
+                        sellingGuitarToClient.sell();
+                        break;
+                    case 3:
+                        System.out.println("Ваш баланс составляет " + playerValues.getBalance() + " рублей");
+                        optionInt = 0;
+                        break;
+                    case 4:
+                        if(playerValues.getGuitars() == null) {
+                            System.out.println("У вас нету гитар на складе");
+                        }
+                        else {
+                            System.out.println("Список ваших гитар на складе");
+                            for(int i = 0; i < playerValues.getGuitars().size(); i++) {
+                                System.out.println(playerValues.getGuitars().get(i));
+                            }
+                        }
+                        optionInt = 0;
+                        break;
+                    case 5:
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Вы ввели несуществующий параметр");
+                        optionInt = 0;
+                        break;
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Вы не ввели целочисленное значение");
+            }
+            System.out.println();
+        }
+
+
+
+        scanner.close();
+    }
+}
