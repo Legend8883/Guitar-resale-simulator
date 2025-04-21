@@ -1,5 +1,6 @@
 package org.legend8883.guitarResaleSimulator.Client;
 
+import org.legend8883.guitarResaleSimulator.Misc.GeneratePercents;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import java.util.Random;
 
 public class BuyingGuitarFromClient {
     private Random random = new Random();
+    private int randomValue;
 
     @Value("${client.names}")
     private String clientNames;
@@ -17,10 +19,14 @@ public class BuyingGuitarFromClient {
     private String guitarName;
 
     public void buy() {
+        generateClientName();
+        generateGuitar();
 
-        int randomValue;
+    }
 
-        //Генерация случайного имени с файла
+    //Генерация случайного имени с файла
+    public void generateClientName() {
+
         ArrayList<String> namesList = new ArrayList<>();
 
         for (String name : clientNames.split(", ")) {
@@ -33,9 +39,11 @@ public class BuyingGuitarFromClient {
         clientName = namesList.get(randomValue);
 
         System.out.println("Покупка гитары у " + clientName);
+    }
 
+    //Генерация случайной цены относительно той, которая указана в файле
+    public void generateGuitar() {
 
-        //Генерация случайной цены относительно той, которая указана в файле
         ArrayList<String> guitarsList = new ArrayList<>();
 
         for (String guitarName : guitarName.split(", ")) {
@@ -52,17 +60,26 @@ public class BuyingGuitarFromClient {
             guitarsList.add(guitar);
         }
         String guitarName = guitarsList.get(0);
-        try {
-            double guitarPrice = Double.parseDouble(guitarsList.get(1));
 
-            System.out.println(
-                    "Тип гитары: " + guitarName + "\n" +
-                    "Цена: " + guitarPrice
-            );
+        double guitarPrice = 0;
+        int genPercents = 0;
+
+        try {
+            guitarPrice = Double.parseDouble(guitarsList.get(1));
+
+            GeneratePercents generatePercents = new GeneratePercents();
+            genPercents = generatePercents.generate();
+
+            guitarPrice += guitarPrice * genPercents / 100;
+
         } catch (NumberFormatException e) {
             System.out.println("Введите double значение для гитары " + guitarName + " в файле names.properties");
         }
 
-
+        System.out.println(
+                "Тип гитары: " + guitarName + "\n" +
+                        "Цена:" + guitarPrice + "\n" +
+                        "Проценты: " + genPercents
+        );
     }
 }

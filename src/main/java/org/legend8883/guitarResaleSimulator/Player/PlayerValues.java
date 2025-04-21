@@ -3,14 +3,14 @@ package org.legend8883.guitarResaleSimulator.Player;
 import java.util.ArrayList;
 
 public class PlayerValues {
-    private int balance;
+    private double balance;
     private ArrayList<String> guitars;
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
