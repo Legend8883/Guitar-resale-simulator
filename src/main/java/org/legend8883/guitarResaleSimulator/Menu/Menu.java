@@ -3,12 +3,17 @@ package org.legend8883.guitarResaleSimulator.Menu;
 import org.legend8883.guitarResaleSimulator.Client.BuyingGuitarFromClient;
 import org.legend8883.guitarResaleSimulator.Client.SellingGuitarToClient;
 import org.legend8883.guitarResaleSimulator.Player.PlayerValues;
+import org.legend8883.guitarResaleSimulator.Spring.AppConfiguration;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Scanner;
 
 public class Menu {
     public void open() {
         Scanner scanner = new Scanner(System.in);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
 
         String optionStr;
         int optionInt = 0;
@@ -30,18 +35,17 @@ public class Menu {
             optionStr = scanner.nextLine();
 
             try {
-
                 optionInt = Integer.parseInt(optionStr);
-                PlayerValues playerValues = new PlayerValues();
+                PlayerValues playerValues = annotationConfigApplicationContext.getBean("playerBean", PlayerValues.class);
 
                 switch (optionInt) {
 
                     case 1:
-                        BuyingGuitarFromClient buyingGuitarFromClient = new BuyingGuitarFromClient();
+                        BuyingGuitarFromClient buyingGuitarFromClient = context.getBean("buyBean", BuyingGuitarFromClient.class);
                         buyingGuitarFromClient.buy();
                         break;
                     case 2:
-                        SellingGuitarToClient sellingGuitarToClient = new SellingGuitarToClient();
+                        SellingGuitarToClient sellingGuitarToClient = context.getBean("sellBean", SellingGuitarToClient.class);
                         sellingGuitarToClient.sell();
                         break;
                     case 3:
@@ -76,7 +80,7 @@ public class Menu {
         }
 
 
-
+        context.close();
         scanner.close();
     }
 }

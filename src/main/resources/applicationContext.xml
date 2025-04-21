@@ -7,6 +7,12 @@
        http://www.springframework.org/schema/context
        https://www.springframework.org/schema/context/spring-context.xsd">
 
+    <bean name="menuBean"
+          class="org.legend8883.guitarResaleSimulator.Menu.Menu"
+    />
+    <context:component-scan base-package="org.legend8883.guitarResaleSimulator.Client"/>
 
+<!--    <context:property-placeholder location="guitarList.properties"/>-->
+    <context:property-placeholder location="names.properties"/>
 
 </beans>
