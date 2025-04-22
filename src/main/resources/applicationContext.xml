@@ -10,7 +10,7 @@
     <bean name="menuBean"
           class="org.legend8883.guitarResaleSimulator.Menu.Menu"
     />
-    <context:component-scan base-package="org.legend8883.guitarResaleSimulator.Client"/>
+    <context:component-scan base-package="org.legend8883.guitarResaleSimulator"/>
 
 <!--    <context:property-placeholder location="guitarList.properties"/>-->
     <context:property-placeholder location="names.properties"/>

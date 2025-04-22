@@ -2,6 +2,7 @@ package org.legend8883.guitarResaleSimulator.Client;
 
 import org.legend8883.guitarResaleSimulator.Misc.GeneratePercents;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,15 +14,18 @@ public class BuyingGuitarFromClient {
     private Random random = new Random();
     private int randomValue;
 
+    private ArrayList<String> guitarsList = new ArrayList<>();
+    private String guitarName;
+
     @Value("${client.names}")
     private String clientNames;
     @Value("${guitar.names}")
-    private String guitarName;
+    private String guitarNames;
 
     public void buy() {
         generateClientName();
-        generateGuitar();
-
+        generateGuitarName();
+        generateGuitarPrice();
     }
 
     //Генерация случайного имени с файла
@@ -42,11 +46,9 @@ public class BuyingGuitarFromClient {
     }
 
     //Генерация случайной цены относительно той, которая указана в файле
-    public void generateGuitar() {
+    public void generateGuitarName() {
 
-        ArrayList<String> guitarsList = new ArrayList<>();
-
-        for (String guitarName : guitarName.split(", ")) {
+        for (String guitarName : guitarNames.split(", ")) {
             guitarsList.add(guitarName);
         }
 
@@ -59,18 +61,23 @@ public class BuyingGuitarFromClient {
         for (String guitar : guitarTemp.split("=")) {
             guitarsList.add(guitar);
         }
-        String guitarName = guitarsList.get(0);
+        guitarName = guitarsList.get(0);
+    }
+
+    public void generateGuitarPrice() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         double guitarPrice = 0;
+        double guitarMinPrice = 0;
         int genPercents = 0;
 
         try {
             guitarPrice = Double.parseDouble(guitarsList.get(1));
 
-            GeneratePercents generatePercents = new GeneratePercents();
+            GeneratePercents generatePercents = context.getBean("percentsBean", GeneratePercents.class);
             genPercents = generatePercents.generate();
 
-            guitarPrice += guitarPrice * genPercents / 100;
+            guitarMinPrice = guitarPrice - (guitarPrice * genPercents / 100);
 
         } catch (NumberFormatException e) {
             System.out.println("Введите double значение для гитары " + guitarName + " в файле names.properties");
@@ -79,7 +86,10 @@ public class BuyingGuitarFromClient {
         System.out.println(
                 "Тип гитары: " + guitarName + "\n" +
                         "Цена:" + guitarPrice + "\n" +
-                        "Проценты: " + genPercents
+                        "Проценты: " + genPercents + "\n" +
+                        "Минимальная цена гитары: " + guitarMinPrice
         );
+
+        context.close();
     }
 }

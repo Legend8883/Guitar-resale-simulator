@@ -1,6 +1,10 @@
 package org.legend8883.guitarResaleSimulator.Misc;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Random;
+
+@Component("percentsBean")
 
 public class GeneratePercents {
     private Random random = new Random();
