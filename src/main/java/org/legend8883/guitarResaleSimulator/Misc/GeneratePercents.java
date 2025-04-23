@@ -7,7 +7,7 @@ import java.util.Random;
 @Component("percentsBean")
 
 public class GeneratePercents {
-    private Random random = new Random();
+    private final Random random = new Random();
     public int generate() {
         return random.nextInt(20 - 4) + 5;
     }

@@ -42,7 +42,7 @@ public class Menu {
 
                     case 1:
                         BuyingGuitarFromClient buyingGuitarFromClient = context.getBean("buyBean", BuyingGuitarFromClient.class);
-                        buyingGuitarFromClient.buy();
+                        buyingGuitarFromClient.generateDialog();
                         break;
                     case 2:
                         SellingGuitarToClient sellingGuitarToClient = context.getBean("sellBean", SellingGuitarToClient.class);

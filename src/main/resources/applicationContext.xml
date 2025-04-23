@@ -13,6 +13,6 @@
     <context:component-scan base-package="org.legend8883.guitarResaleSimulator"/>
 
 <!--    <context:property-placeholder location="guitarList.properties"/>-->
-    <context:property-placeholder location="names.properties"/>
+    <context:property-placeholder location="program.properties"/>
 
 </beans>
