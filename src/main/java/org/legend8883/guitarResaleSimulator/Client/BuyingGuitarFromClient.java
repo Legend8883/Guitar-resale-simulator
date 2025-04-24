@@ -2,7 +2,11 @@ package org.legend8883.guitarResaleSimulator.Client;
 
 import org.legend8883.guitarResaleSimulator.Menu.Menu;
 import org.legend8883.guitarResaleSimulator.Misc.GeneratePercents;
+import org.legend8883.guitarResaleSimulator.Player.PlayerValues;
+import org.legend8883.guitarResaleSimulator.Spring.AppConfiguration;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -31,12 +35,15 @@ public class BuyingGuitarFromClient {
     private double guitarPrice = 0;
     private double guitarMinPrice = 0;
 
+    private final Scanner scanner = new Scanner(System.in);
+
+    private boolean caught = false;
+
 
     public void generateDialog() {
-        Scanner scanner = new Scanner(System.in);
         String optionStr;
         int optionInt = 0;
-        boolean caught = false;
+
 
         while (optionInt == 0) {
             System.out.println();
@@ -71,6 +78,7 @@ public class BuyingGuitarFromClient {
                 switch (optionInt) {
                     case 1:
                         buyGuitar();
+                        optionInt = 0;
                         break;
                     case 2:
                         optionInt = 0;
@@ -86,6 +94,8 @@ public class BuyingGuitarFromClient {
                         break;
                     default:
                         System.out.println("Такого параметра нет");
+                        optionInt = 0;
+                        caught = true;
                         break;
                 }
             } catch (NumberFormatException e) {
@@ -149,6 +159,40 @@ public class BuyingGuitarFromClient {
     }
 
     public void buyGuitar() {
+        boolean optionCycle = true;
 
+        while (optionCycle) {
+            System.out.println("Введите цену, которую вы хотите заплатить за эту гитару: ");
+            System.out.println("Если вы хотите выйти в меню покупки гитар напишите \"exit\"");
+
+            String userPriceStr = scanner.nextLine();
+            double userPriceDouble = 0;
+
+            if (userPriceStr.equals("exit")) {
+                caught = true;
+                break;
+            }
+
+            try {
+                userPriceDouble = Double.parseDouble(userPriceStr);
+                if (userPriceDouble >= guitarMinPrice) {
+                    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+                    PlayerValues playerValues = context.getBean("playerBean", PlayerValues.class);
+                    double balance = playerValues.getBalance();
+                    playerValues.setBalance(balance - userPriceDouble);
+                    System.out.println("Вы успешно купили гитару!");
+                    System.out.println(playerValues.getBalance());
+
+                    optionCycle = false;
+                    context.close();
+                } else {
+                    System.out.println("Вы ввели цену, превышающую ожидаемую клиентом");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Вы ввели не число");
+            }
+
+        }
     }
 }

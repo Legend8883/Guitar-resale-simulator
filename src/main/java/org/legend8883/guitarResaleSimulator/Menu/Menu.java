@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Menu {
     public void open() {
         Scanner scanner = new Scanner(System.in);
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ClassPathXmlApplicationContext ClassContextClassPathXmlApplicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
 
         String optionStr;
@@ -41,11 +41,11 @@ public class Menu {
                 switch (optionInt) {
 
                     case 1:
-                        BuyingGuitarFromClient buyingGuitarFromClient = context.getBean("buyBean", BuyingGuitarFromClient.class);
+                        BuyingGuitarFromClient buyingGuitarFromClient = ClassContextClassPathXmlApplicationContext.getBean("buyBean", BuyingGuitarFromClient.class);
                         buyingGuitarFromClient.generateDialog();
                         break;
                     case 2:
-                        SellingGuitarToClient sellingGuitarToClient = context.getBean("sellBean", SellingGuitarToClient.class);
+                        SellingGuitarToClient sellingGuitarToClient = ClassContextClassPathXmlApplicationContext.getBean("sellBean", SellingGuitarToClient.class);
                         sellingGuitarToClient.sell();
                         break;
                     case 3:
@@ -80,7 +80,7 @@ public class Menu {
         }
 
 
-        context.close();
+        ClassContextClassPathXmlApplicationContext.close();
         scanner.close();
     }
 }
