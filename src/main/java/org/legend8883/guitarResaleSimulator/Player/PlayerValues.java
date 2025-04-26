@@ -7,7 +7,11 @@ import java.util.HashMap;
 
 public class PlayerValues {
     private static double balance = 200000;
-    private static HashMap<String, Integer> guitars;
+    private static HashMap<String, Integer> guitars = new HashMap<>(); {
+        guitars.put("Classical", 0);
+        guitars.put("Acoustic", 0);
+        guitars.put("Electric", 0);
+    }
 
     public PlayerValues() {
 

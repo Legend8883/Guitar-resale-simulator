@@ -7,7 +7,9 @@ import org.legend8883.guitarResaleSimulator.Spring.AppConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Menu {
     public void open() {
@@ -17,7 +19,6 @@ public class Menu {
 
         String optionStr;
         int optionInt = 0;
-
 
 
         while (optionInt == 0) {
@@ -53,13 +54,14 @@ public class Menu {
                         optionInt = 0;
                         break;
                     case 4:
-                        if(playerValues.getGuitars() == null) {
+                        if (playerValues.getGuitars() == null) {
                             System.out.println("У вас нету гитар на складе");
-                        }
-                        else {
+                        } else {
                             System.out.println("Список ваших гитар на складе");
-                            for(int i = 0; i < playerValues.getGuitars().size(); i++) {
-                                System.out.println(playerValues.getGuitars().get(i));
+                            ArrayList<String> keys = new ArrayList<>(playerValues.getGuitars().keySet());
+
+                            for (int i = 0; i < keys.size(); i++) {
+                                System.out.println("Тип гитары: " + keys.get(i) + ", количество: " + playerValues.getGuitars().get(keys.get(i)));
                             }
                         }
                         optionInt = 0;
