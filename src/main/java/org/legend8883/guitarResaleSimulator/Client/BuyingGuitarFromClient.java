@@ -11,6 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -180,6 +181,14 @@ public class BuyingGuitarFromClient {
                     PlayerValues playerValues = context.getBean("playerBean", PlayerValues.class);
                     double balance = playerValues.getBalance();
                     playerValues.setBalance(balance - userPriceDouble);
+
+                    // Изменение количества гитар
+                    HashMap<String, Integer> guitarMap = playerValues.getGuitars();
+                    int guitarCount = guitarMap.get(guitarName);
+                    guitarCount++;
+                    guitarMap.put(guitarName, guitarCount);
+                    playerValues.setGuitars(guitarMap);
+
                     System.out.println("Вы успешно купили гитару!");
                     System.out.println(playerValues.getBalance());
 
