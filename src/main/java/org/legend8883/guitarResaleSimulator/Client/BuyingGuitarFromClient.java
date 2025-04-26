@@ -5,7 +5,6 @@ import org.legend8883.guitarResaleSimulator.Misc.GeneratePercents;
 import org.legend8883.guitarResaleSimulator.Player.PlayerValues;
 import org.legend8883.guitarResaleSimulator.Spring.AppConfiguration;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -40,6 +39,11 @@ public class BuyingGuitarFromClient {
 
     private boolean caught = false;
 
+    private final AnnotationConfigApplicationContext PlayerContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
+    private final PlayerValues playerValues = PlayerContext.getBean("playerBean", PlayerValues.class);
+
+    private double userPriceDouble = 0;
+
 
     public void generateDialog() {
         String optionStr;
@@ -60,7 +64,8 @@ public class BuyingGuitarFromClient {
                             "Тип гитары: " + guitarName + "\n" +
                             "Цена:" + guitarPrice + "\n" +
                             "Проценты: " + genPercents + "\n" +
-                            "Минимальная цена гитары: " + guitarMinPrice
+                            "Минимальная цена гитары: " + guitarMinPrice + "\n" +
+                            "Ваш баланс равен " + playerValues.getBalance()
             );
 
             System.out.println("""
@@ -78,7 +83,7 @@ public class BuyingGuitarFromClient {
                 optionInt = Integer.parseInt(optionStr);
                 switch (optionInt) {
                     case 1:
-                        buyGuitar();
+                        buyGuitarMenu();
                         optionInt = 0;
                         break;
                     case 2:
@@ -105,10 +110,11 @@ public class BuyingGuitarFromClient {
             }
         }
         scanner.close();
+        PlayerContext.close();
     }
 
     //Генерация случайного имени с файла
-    public void generateClientName() {
+    private void generateClientName() {
 
         ArrayList<String> namesList = new ArrayList<>();
 
@@ -122,7 +128,7 @@ public class BuyingGuitarFromClient {
     }
 
     //Генерация случайной цены относительно той, которая указана в файле
-    public void generateGuitarName() {
+    private void generateGuitarName() {
         guitarsList.clear();
 
         for (String guitarName : guitarNames.split(", ")) {
@@ -141,7 +147,7 @@ public class BuyingGuitarFromClient {
         guitarName = guitarsList.get(0);
     }
 
-    public void generateGuitarPrice() {
+    private void generateGuitarPrice() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         try {
@@ -159,7 +165,7 @@ public class BuyingGuitarFromClient {
         context.close();
     }
 
-    public void buyGuitar() {
+    private void buyGuitarMenu() {
         boolean optionCycle = true;
 
         while (optionCycle) {
@@ -167,33 +173,20 @@ public class BuyingGuitarFromClient {
             System.out.println("Если вы хотите выйти в меню покупки гитар напишите \"exit\"");
 
             String userPriceStr = scanner.nextLine();
-            double userPriceDouble = 0;
 
             if (userPriceStr.equals("exit")) {
                 caught = true;
                 break;
             }
-
             try {
                 userPriceDouble = Double.parseDouble(userPriceStr);
                 if (userPriceDouble >= guitarMinPrice) {
-                    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
-                    PlayerValues playerValues = context.getBean("playerBean", PlayerValues.class);
-                    double balance = playerValues.getBalance();
-                    playerValues.setBalance(balance - userPriceDouble);
-
-                    // Изменение количества гитар
-                    HashMap<String, Integer> guitarMap = playerValues.getGuitars();
-                    int guitarCount = guitarMap.get(guitarName);
-                    guitarCount++;
-                    guitarMap.put(guitarName, guitarCount);
-                    playerValues.setGuitars(guitarMap);
+                    setPlayerBalance();
+                    setPlayerGuitarList();
 
                     System.out.println("Вы успешно купили гитару!");
-                    System.out.println(playerValues.getBalance());
 
                     optionCycle = false;
-                    context.close();
                 } else {
                     System.out.println("Вы ввели цену, превышающую ожидаемую клиентом");
                 }
@@ -203,5 +196,18 @@ public class BuyingGuitarFromClient {
             }
 
         }
+    }
+
+    private void setPlayerBalance() {
+        double balance = playerValues.getBalance();
+        playerValues.setBalance(balance - userPriceDouble);
+    }
+
+    private void setPlayerGuitarList() {
+        HashMap<String, Integer> guitarMap = playerValues.getGuitars();
+        int guitarCount = guitarMap.get(guitarName);
+        guitarCount++;
+        guitarMap.put(guitarName, guitarCount);
+        playerValues.setGuitars(guitarMap);
     }
 }
