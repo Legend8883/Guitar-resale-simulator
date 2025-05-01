@@ -47,7 +47,7 @@ public class SellingGuitarToClient {
     private ArrayList<String> selectedGuitar = new ArrayList<>();
 
     public void test() {
-        generateGuitarName();
+            generateGuitarName();
     }
 
     public void generateDialog() {
@@ -76,7 +76,7 @@ public class SellingGuitarToClient {
 
             System.out.println("""
                     
-                    Будете ли вы покупать эту гитару?
+                    Будете ли вы продавать эту гитару?
                     1. Да
                     2. Нет
                     3. Выйти в меню
@@ -158,6 +158,8 @@ public class SellingGuitarToClient {
         String guitarTemp;
 
         while (cycleOn) {
+            selectedGuitar.clear();
+
             randomValue = random.nextInt(guitarsList.size());
             guitarTemp = guitarsList.get(randomValue);
 
@@ -172,12 +174,11 @@ public class SellingGuitarToClient {
             int removeValue = 0;
 
             for(int i = 0; i < guitarsList.size(); i++) {
+                if (availableGuitars.get(i).equals(guitarName)) {
+                    removeValue = i;
+                }
                 if (guitarName.equals(availableGuitars.get(i)) && playerValues.getGuitars().get(availableGuitars.get(i)) >= 1) {
                     cycleOn = false;
-                    break;
-                }
-                else if (!availableGuitars.get(i).equals(guitarName)) {
-                    removeValue = i;
                     break;
                 }
             }
