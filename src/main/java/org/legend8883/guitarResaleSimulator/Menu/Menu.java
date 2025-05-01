@@ -47,7 +47,7 @@ public class Menu {
                         break;
                     case 2:
                         SellingGuitarToClient sellingGuitarToClient = ClassContextClassPathXmlApplicationContext.getBean("sellBean", SellingGuitarToClient.class);
-                        sellingGuitarToClient.sell();
+                        sellingGuitarToClient.test();
                         break;
                     case 3:
                         System.out.println("Ваш баланс составляет " + playerValues.getBalance() + " рублей");

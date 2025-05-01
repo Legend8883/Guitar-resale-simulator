@@ -28,7 +28,7 @@ public class BuyingGuitarFromClient {
 
     private String clientName;
 
-    private ArrayList<String> guitarsList = new ArrayList<>();
+    private final ArrayList<String> guitarsList = new ArrayList<>();
     private String guitarName;
 
     private int genPercents = 0;
@@ -62,9 +62,9 @@ public class BuyingGuitarFromClient {
             System.out.println(
                     "Покупка гитары у " + clientName + "\n" +
                             "Тип гитары: " + guitarName + "\n" +
-                            "Цена:" + guitarPrice + "\n" +
-                            "Проценты: " + genPercents + "\n" +
-                            "Минимальная цена гитары: " + guitarMinPrice + "\n" +
+                            "Средняя цена данной гитары:" + guitarPrice + "\n" +
+                            "Максимальный процент скидки, ожидаемый клиентом: " + genPercents + "\n" +
+                            "Минимальная цена гитары, ожидаемая клиентом: " + guitarMinPrice + "\n" +
                             "Ваш баланс равен " + playerValues.getBalance()
             );
 
