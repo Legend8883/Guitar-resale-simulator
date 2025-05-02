@@ -9,7 +9,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Menu {
     public void open() {
@@ -47,7 +46,7 @@ public class Menu {
                         break;
                     case 2:
                         SellingGuitarToClient sellingGuitarToClient = ClassContextClassPathXmlApplicationContext.getBean("sellBean", SellingGuitarToClient.class);
-                        sellingGuitarToClient.test();
+                        sellingGuitarToClient.generateDialog();
                         break;
                     case 3:
                         System.out.println("Ваш баланс составляет " + playerValues.getBalance() + " рублей");

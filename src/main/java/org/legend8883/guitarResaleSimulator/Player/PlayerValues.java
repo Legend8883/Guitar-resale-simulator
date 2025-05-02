@@ -1,13 +1,11 @@
 package org.legend8883.guitarResaleSimulator.Player;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PlayerValues {
     private static double balance = 200000;
     private static HashMap<String, Integer> guitars = new HashMap<>();
+
     static {
         guitars.put("Classical", 0);
         guitars.put("Acoustic", 0);
@@ -15,9 +13,7 @@ public class PlayerValues {
     }
 
     public PlayerValues() {
-//        guitars.put("Classical", 0);
-//        guitars.put("Acoustic", 0);
-//        guitars.put("Electric", 0);
+
     }
 
     public double getBalance() {

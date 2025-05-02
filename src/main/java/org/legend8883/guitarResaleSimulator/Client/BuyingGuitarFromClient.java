@@ -62,9 +62,9 @@ public class BuyingGuitarFromClient {
             System.out.println(
                     "Покупка гитары у " + clientName + "\n" +
                             "Тип гитары: " + guitarName + "\n" +
-                            "Средняя цена данной гитары:" + guitarPrice + "\n" +
+                            "Средняя цена данной гитары: " + guitarPrice + "\n" +
                             "Максимальный процент скидки, ожидаемый клиентом: " + genPercents + "\n" +
-                            "Минимальная цена гитары, ожидаемая клиентом: " + guitarMinPrice + "\n" +
+                            "Минимальная цена гитары, ожидаемая клиентом: " + guitarMinPrice + "\n\n" +
                             "Ваш баланс равен " + playerValues.getBalance()
             );
 
@@ -136,7 +136,6 @@ public class BuyingGuitarFromClient {
         }
 
         randomValue = random.nextInt(guitarsList.size());
-
         String guitarTemp = guitarsList.get(randomValue);
 
         guitarsList.clear();
@@ -188,7 +187,7 @@ public class BuyingGuitarFromClient {
 
                     optionCycle = false;
                 } else {
-                    System.out.println("Вы ввели цену, превышающую ожидаемую клиентом");
+                    System.out.println("Вы ввели слишком низкую цену цену, относительно ожидаемой клиентом");
                 }
 
             } catch (NumberFormatException e) {

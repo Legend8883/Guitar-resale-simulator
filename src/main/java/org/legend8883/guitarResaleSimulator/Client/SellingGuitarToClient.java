@@ -42,20 +42,19 @@ public class SellingGuitarToClient {
 
     private double userPriceDouble = 0;
 
-    private ArrayList<String> keys = new ArrayList<>(playerValues.getGuitars().keySet());
+    private ArrayList<String> keys;
 
-    private ArrayList<String> selectedGuitar = new ArrayList<>();
-
-    public void test() {
-            generateGuitarName();
-    }
+    private final ArrayList<String> selectedGuitar = new ArrayList<>();
 
     public void generateDialog() {
         String optionStr;
         int optionInt = 0;
 
+        keys = new ArrayList<>(playerValues.getGuitars().keySet());
 
         while (optionInt == 0) {
+            isUserHaveGuitars();
+
             System.out.println();
 
             if (!caught) {
@@ -67,11 +66,13 @@ public class SellingGuitarToClient {
             System.out.println(
                     "Продажа гитары клиенту " + clientName + "\n" +
                             "Тип желаемой гитары клиентом: " + guitarName + "\n" +
-                            "Средняя цена данной гитары:" + guitarPrice + "\n" +
+                            "Средняя цена данной гитары: " + guitarPrice + "\n" +
                             "Максимальный процент наценки, ожидаемый клиентом: " + genPercents + "\n" +
                             "Максимальная цена гитары, ожидаемая клиентом: " + guitarMaxPrice + "\n" +
+                            "\n" +
                             "Ваш баланс равен " + playerValues.getBalance()
             );
+            System.out.println();
             getUserGuitars();
 
             System.out.println("""
@@ -90,7 +91,7 @@ public class SellingGuitarToClient {
                 optionInt = Integer.parseInt(optionStr);
                 switch (optionInt) {
                     case 1:
-//                        buyGuitarMenu();
+                        sellGuitarMenu();
                         optionInt = 0;
                         break;
                     case 2:
@@ -117,6 +118,26 @@ public class SellingGuitarToClient {
             }
         }
         scanner.close();
+    }
+
+    private void isUserHaveGuitars() {
+        boolean userHaveGuitars = false;
+
+        for (int i = 0; i < keys.size(); i++) {
+            if (playerValues.getGuitars().get(keys.get(i)) >= 1) {
+                userHaveGuitars = true;
+            }
+        }
+
+        if (!userHaveGuitars) {
+            System.out.println("У тебя нет гитар для продажи");
+            System.out.println();
+
+            ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+            Menu menu = context.getBean("menuBean", Menu.class);
+            menu.open();
+            context.close();
+        }
     }
 
     //Генерация случайного имени с файла
@@ -148,16 +169,30 @@ public class SellingGuitarToClient {
     // Генерация случайной гитары, которая имеется у пользователя
     private void generateGuitarName() {
         guitarsList.clear();
+        selectedGuitar.clear();
 
         // Добавление всех гитар с файла, вместе с ценой
         for (String guitarName : guitarNames.split(", ")) {
             guitarsList.add(guitarName);
         }
 
+        // Список для имен тех гитар, которые есть у пользователя
+        ArrayList<String> availableGuitars = new ArrayList<>();
+        for (int i = 0; i < keys.size(); i++) {
+            availableGuitars.add(keys.get(i));
+        }
+
         boolean cycleOn = true;
         String guitarTemp;
 
         while (cycleOn) {
+            // Проверка на пустоту списка
+            if (guitarsList.isEmpty()) {
+                cycleOn = false;
+                System.out.println("У тебя нету гитар, как ты сюда пробрался?");
+                System.exit(0);
+            }
+
             // Важная очистка списка
             selectedGuitar.clear();
 
@@ -172,15 +207,11 @@ public class SellingGuitarToClient {
             // Получение имени гитары
             guitarName = selectedGuitar.get(0);
 
-            // Список для имен тех гитар, которые есть у пользователя
-            ArrayList<String> availableGuitars = new ArrayList<>();
-            availableGuitars = keys;
-
             // Значение для удаления какой-либо гитары из списка availableGuitars
             int removeValue = 0;
 
             // Цикл проходящийся по всем гитарам из списка guitarsList
-            for(int i = 0; i < guitarsList.size(); i++) {
+            for (int i = 0; i < guitarsList.size(); i++) {
                 // Присваиваем номер гитары значению, чтобы в будущем ее удалить из списка availableGuitars
                 if (availableGuitars.get(i).equals(guitarName)) {
                     removeValue = i;
@@ -196,18 +227,8 @@ public class SellingGuitarToClient {
             guitarsList.remove(randomValue);
             availableGuitars.remove(removeValue);
 
-            // Проверка на пустоту списка
-            if (guitarsList.size() == 0) {
-                cycleOn = false;
-                System.out.println("У тебя нету гитар, как ты сюда пробрался?");
-                System.exit(0);
-            }
-
             // И так цикл будет работать до тех пор, пока случайный guitarName не будет равен любой гитаре, которая имеется у пользователя
         }
-
-        System.out.println(guitarName);
-
     }
 
     //Генерация случайной цены относительно той, которая указана в файле
@@ -229,12 +250,12 @@ public class SellingGuitarToClient {
         context.close();
     }
 
-    private void buyGuitarMenu() {
+    private void sellGuitarMenu() {
         boolean optionCycle = true;
 
         while (optionCycle) {
-            System.out.println("Введите цену, которую вы хотите заплатить за эту гитару: ");
-            System.out.println("Если вы хотите выйти в меню покупки гитар напишите \"exit\"");
+            System.out.println("Введите цену, за которую вы хотите продать гитару: ");
+            System.out.println("Если вы хотите выйти в меню продажи гитар напишите \"exit\"");
 
             String userPriceStr = scanner.nextLine();
 
@@ -244,15 +265,15 @@ public class SellingGuitarToClient {
             }
             try {
                 userPriceDouble = Double.parseDouble(userPriceStr);
-                if (userPriceDouble >= guitarMaxPrice) {
+                if (userPriceDouble <= guitarMaxPrice) {
                     setPlayerBalance();
                     setPlayerGuitarList();
 
-                    System.out.println("Вы успешно купили гитару!");
+                    System.out.println("Вы успешно продали гитару!");
 
                     optionCycle = false;
                 } else {
-                    System.out.println("Вы ввели цену, превышающую ожидаемую клиентом");
+                    System.out.println("Вы ввели слишком высокую цену, относительно ожидаемой клиентом");
                 }
 
             } catch (NumberFormatException e) {
@@ -264,14 +285,19 @@ public class SellingGuitarToClient {
 
     private void setPlayerBalance() {
         double balance = playerValues.getBalance();
-        playerValues.setBalance(balance - userPriceDouble);
+        playerValues.setBalance(balance + userPriceDouble);
     }
 
     private void setPlayerGuitarList() {
         HashMap<String, Integer> guitarMap = playerValues.getGuitars();
         int guitarCount = guitarMap.get(guitarName);
-        guitarCount++;
-        guitarMap.put(guitarName, guitarCount);
-        playerValues.setGuitars(guitarMap);
+        if (guitarCount > 0) {
+            guitarCount--;
+            guitarMap.put(guitarName, guitarCount);
+            playerValues.setGuitars(guitarMap);
+        } else {
+            System.out.println("Ты сжульничал!!! Твои гитары ушли в минус!!!");
+            System.exit(0);
+        }
     }
 }
