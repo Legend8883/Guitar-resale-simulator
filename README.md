@@ -1,0 +1,8 @@
+Это приложение “Симулятор перекупа гитар”. В этом приложении вы сможете перепродавать гитары, которые вам будут приносить люди (разумеется б/y), клиентам вашего магазина. У вас будет начальный баланс, на который вы сможете купить несколько гитар, которые вам принесут для продажи (также будет возможность скинуть цену за покупаемую гитару), затем для того, чтобы заработать деньги вам придется перепродать эти же гитары, но уже с наценкой. В зависимости от наценки и от желания клиента, вы сможете перепродать этому человеку ему гитару. Клиент может отказаться, если наценка будет слишком большая, но также не нужно торговать себе в убыток, потому что деньги не бесконечные. 
+Также есть несколько типов гитар: классическая, акустическая и электрическая. 
+Ваша задача заработать на перепродаже гитар как можно больше денег.
+
+
+This is a Guitar Resale Simulator app. In this application, you will be able to resell guitars that people will bring you (of course, used ones) to the customers of your store. You will have an initial balance with which you can buy several guitars that will be brought to you for sale (you will also have the opportunity to lower the price for the guitar you are buying), then in order to earn money you will have to resell the same guitars, but with a margin. Depending on the margin and the customer's desire, you can resell the guitar to that person. The client can refuse if the margin is too high, but there is also no need to trade at a loss, because the money is not infinite. 
+	There are also several types of guitars: classical, acoustic and electric. 
+	Your task is to make as much money as possible by reselling guitars.
