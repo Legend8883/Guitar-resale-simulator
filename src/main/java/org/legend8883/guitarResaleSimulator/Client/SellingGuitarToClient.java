@@ -145,11 +145,11 @@ public class SellingGuitarToClient {
         }
     }
 
-    //Генерация случайной цены относительно той, которая указана в файле
+    // Генерация случайной гитары, которая имеется у пользователя
     private void generateGuitarName() {
-
         guitarsList.clear();
 
+        // Добавление всех гитар с файла, вместе с ценой
         for (String guitarName : guitarNames.split(", ")) {
             guitarsList.add(guitarName);
         }
@@ -158,45 +158,59 @@ public class SellingGuitarToClient {
         String guitarTemp;
 
         while (cycleOn) {
+            // Важная очистка списка
             selectedGuitar.clear();
 
+            // Генерация случайной гитары из файла
             randomValue = random.nextInt(guitarsList.size());
             guitarTemp = guitarsList.get(randomValue);
 
+            // Разделение имени и цены гитары
             for (String guitar : guitarTemp.split("=")) {
                 selectedGuitar.add(guitar);
             }
+            // Получение имени гитары
             guitarName = selectedGuitar.get(0);
 
+            // Список для имен тех гитар, которые есть у пользователя
             ArrayList<String> availableGuitars = new ArrayList<>();
             availableGuitars = keys;
 
+            // Значение для удаления какой-либо гитары из списка availableGuitars
             int removeValue = 0;
 
+            // Цикл проходящийся по всем гитарам из списка guitarsList
             for(int i = 0; i < guitarsList.size(); i++) {
+                // Присваиваем номер гитары значению, чтобы в будущем ее удалить из списка availableGuitars
                 if (availableGuitars.get(i).equals(guitarName)) {
                     removeValue = i;
                 }
+                // Если у пользователя есть хотя бы 1 гитара, равная переменной guitarName, тогда цикл while и for заканчиваются
                 if (guitarName.equals(availableGuitars.get(i)) && playerValues.getGuitars().get(availableGuitars.get(i)) >= 1) {
                     cycleOn = false;
                     break;
                 }
             }
 
+            // Удаляем те гитары, которые не соответствуют guitarName
             guitarsList.remove(randomValue);
             availableGuitars.remove(removeValue);
 
+            // Проверка на пустоту списка
             if (guitarsList.size() == 0) {
                 cycleOn = false;
                 System.out.println("У тебя нету гитар, как ты сюда пробрался?");
                 System.exit(0);
             }
+
+            // И так цикл будет работать до тех пор, пока случайный guitarName не будет равен любой гитаре, которая имеется у пользователя
         }
 
         System.out.println(guitarName);
 
     }
 
+    //Генерация случайной цены относительно той, которая указана в файле
     private void generateGuitarPrice() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
