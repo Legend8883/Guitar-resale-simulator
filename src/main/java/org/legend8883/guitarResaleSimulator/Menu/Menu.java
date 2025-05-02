@@ -19,7 +19,6 @@ public class Menu {
         String optionStr;
         int optionInt = 0;
 
-
         while (optionInt == 0) {
 
             System.out.println("Меню приложения \"Симулятор перекупа гитар\"");
